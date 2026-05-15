@@ -1,0 +1,223 @@
+.player-bar {
+  position: fixed;
+  bottom: var(--space-4);
+  left: calc(var(--sidebar-width) + var(--space-4));
+  right: var(--space-4);
+  height: var(--player-height);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-6);
+  gap: var(--space-6);
+  box-shadow: var(--shadow-player);
+  z-index: 50;
+  animation: slideUp var(--transition-slow) ease-out;
+}
+
+.player-bar--empty {
+  justify-content: center;
+}
+
+.player-bar__empty-text {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  font-style: italic;
+}
+
+/* Song Info */
+.player-bar__song {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 200px;
+  max-width: 280px;
+  flex: 1;
+}
+
+.player-bar__cover {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.player-bar__song-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.player-bar__song-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-bar__song-artist {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Controls Center */
+.player-bar__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 2;
+  max-width: 600px;
+}
+
+.player-bar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.player-bar__control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-full);
+}
+
+.player-bar__control-btn:hover {
+  color: var(--color-text-primary);
+  transform: scale(1.1);
+}
+
+.player-bar__play-btn {
+  width: 40px;
+  height: 40px;
+  background: var(--color-accent);
+  color: white;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.player-bar__play-btn:hover {
+  background: var(--color-accent-hover);
+  transform: scale(1.08);
+  box-shadow: var(--shadow-md);
+  color: white;
+}
+
+/* Progress Bar */
+.player-bar__progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+/* Volume */
+.player-bar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 140px;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .player-bar {
+    left: var(--space-4);
+    right: var(--space-4);
+    bottom: var(--space-4);
+    height: 64px;
+    padding: 0 var(--space-4);
+    gap: var(--space-3);
+    border-radius: var(--radius-lg);
+    overflow: hidden; /* For the mini progress bar */
+  }
+
+  .player-bar__song {
+    min-width: 0;
+    max-width: none;
+    flex: 1;
+  }
+
+  .player-bar__cover {
+    width: 40px;
+    height: 40px;
+  }
+
+  .player-bar__song-title {
+    font-size: var(--text-sm);
+  }
+
+  .player-bar__song-artist {
+    font-size: var(--text-xs);
+  }
+
+  .player-bar__center {
+    flex: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  /* Position progress bar at the top on mobile */
+  .player-bar__center .progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    height: 2px;
+  }
+
+  .player-bar__center .progress-bar__time {
+    display: none;
+  }
+
+  .player-bar__center .progress-bar__track {
+    height: 2px;
+    border-radius: 0;
+  }
+
+  .player-bar__center .progress-bar__thumb {
+    display: none;
+  }
+
+  .player-bar__right {
+    display: none;
+  }
+
+  .player-bar__controls {
+    gap: var(--space-1);
+  }
+
+  .player-bar__control-btn--prev {
+    display: flex;
+  }
+
+  .player-bar__control-btn--next {
+    display: flex;
+  }
+
+  .player-bar__play-btn {
+    width: 32px;
+    height: 32px;
+  }
+}

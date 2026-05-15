@@ -1,0 +1,61 @@
+This is the project you’ll be working on. Please keep in mind a few architectural and scalability expectations while building it:
+
+Use a clean, feature-based folder structure
+Keep components small, reusable, and focused on a single responsibility
+Ensure the app structure can scale easily as new features are added
+Avoid tightly coupling components with data logic
+Handle loading, error, and empty states consistently across the app
+
+
+Problem Statement: Spotify Clone
+Project Overview
+Build a simplified music streaming web application using React. Users should be able to browse songs, play/pause music, search for tracks, and create playlists.
+For data handling, you can use static data for this project using the following approaches:
+
+Create a .json file in your project with sample songs, artists, album art URLs, and audio file URLs, and import it directly into your components.
+Mock API calls using json-server. This will allow you to simulate real backend requests from a local JSON file and practice working with APIs in a realistic way.
+
+
+Core Features You Need to Build
+
+Authentication & User Management
+
+User signup/login using email and password (or a mocked Spotify OAuth flow)
+Persist authentication state using localStorage
+Display user profile information including avatar and display name
+
+
+2. Music Player Features
+
+Play/Pause functionality
+Next/Previous track controls
+Volume control slider
+Progress bar with click-to-seek
+Display current song: title, artist, album art, duration
+Continuous playback (auto-play next song)
+
+
+3. Playlist Management
+
+Display list of user's playlists
+Create new playlist
+Add/remove songs from playlist
+Delete playlist
+View playlist details with all songs
+
+
+4. Search & Discovery
+
+Search songs by title, artist, or album
+Display search results with filter options
+Featured playlists on homepage
+Recently played tracks section
+
+
+5. UI/UX Requirements
+
+Responsive design (desktop + mobile)
+Smooth animations for player controls
+Loading states for async operations
+Error handling with user-friendly messages
+Keyboard shortcuts (space for play/pause, arrow keys for volume)

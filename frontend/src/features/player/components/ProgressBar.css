@@ -1,0 +1,77 @@
+.progress-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.progress-bar__time {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  min-width: 36px;
+  text-align: center;
+}
+
+.progress-bar__input {
+  flex: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--color-accent) 0%,
+    var(--color-accent) var(--progress),
+    var(--color-border) var(--progress),
+    var(--color-border) 100%
+  );
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  outline: none;
+  transition: height var(--transition-fast);
+}
+
+.progress-bar__input:hover {
+  height: 6px;
+  background: linear-gradient(
+    to right,
+    var(--color-accent-hover) 0%,
+    var(--color-accent-hover) var(--progress),
+    var(--color-border) var(--progress),
+    var(--color-border) 100%
+  );
+}
+
+/* Chrome, Safari, Edge, Opera */
+.progress-bar__input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.progress-bar__input:hover::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+/* Firefox */
+.progress-bar__input::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.progress-bar__input:hover::-moz-range-thumb {
+  opacity: 1;
+}
+

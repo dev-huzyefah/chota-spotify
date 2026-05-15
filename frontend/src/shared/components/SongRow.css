@@ -1,0 +1,129 @@
+.song-row {
+  display: grid;
+  grid-template-columns: 32px 44px 1fr 1fr auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+  cursor: pointer;
+  user-select: none;
+}
+
+.song-row:hover {
+  background: var(--color-surface-hover);
+}
+
+.song-row--active {
+  background: var(--color-accent-light);
+}
+
+.song-row--active:hover {
+  background: var(--color-accent-light);
+}
+
+.song-row__number {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.song-row:hover .song-row__number,
+.song-row--active .song-row__number {
+  color: var(--color-accent);
+}
+
+.song-row__cover {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.song-row__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.song-row__title {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-row--active .song-row__title {
+  color: var(--color-accent);
+}
+
+.song-row__artist {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-row__album {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-row__duration {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  min-width: 40px;
+  text-align: right;
+}
+
+.song-row__actions {
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.song-row:hover .song-row__actions {
+  opacity: 1;
+}
+
+.song-row__action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.song-row__action-btn:hover {
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .song-row {
+    grid-template-columns: 40px 1fr auto auto;
+    gap: var(--space-3);
+  }
+
+  .song-row__number,
+  .song-row__album {
+    display: none;
+  }
+
+  .song-row__actions {
+    opacity: 1;
+  }
+}
