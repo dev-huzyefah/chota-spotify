@@ -4,23 +4,21 @@ import axios, {
   type AxiosResponse, 
   type AxiosRequestConfig 
 } from 'axios';
-import type { User, Song, Playlist, RecentlyPlayed, UserPlaylist } from '../types/types';
+import type { AuthResponse } from '@/features/auth/types/authTypes';
+import { clearSession, getAccessToken } from '@/features/auth/services/authAPI';
+import type { Song, Playlist, RecentlyPlayed, UserPlaylist } from '../types/types';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-/**
- * Custom Axios Instance type to handle response.data interceptor
- */
+const PUBLIC_PATHS = ['/login', '/signup'];
+
 interface ApiInstance extends AxiosInstance {
-  get<T = any, R = T, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
-  post<T = any, R = T, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  patch<T = any, R = T, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
-  delete<T = any, R = T, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  get<T = unknown, R = T, D = unknown>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
+  post<T = unknown, R = T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  patch<T = unknown, R = T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R>;
+  delete<T = unknown, R = T, D = unknown>(url: string, config?: AxiosRequestConfig<D>): Promise<R>;
 }
 
-/**
- * Standardized API Client
- */
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -28,75 +26,75 @@ const api = axios.create({
   },
 }) as ApiInstance;
 
-// Request interceptor to add Authorization header
+function isPublicRequest(url: string | undefined): boolean {
+  if (!url) return false;
+  return PUBLIC_PATHS.some((path) => url.includes(path));
+}
+
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = localStorage.getItem('authorization');
+  if (isPublicRequest(config.url)) {
+    return config;
+  }
+
+  const token = getAccessToken();
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// Response interceptor to simplify data access and handle errors
+function formatErrorMessage(error: unknown): string {
+  if (!axios.isAxiosError(error)) {
+    return error instanceof Error ? error.message : 'API request failed';
+  }
+
+  const data = error.response?.data;
+  if (typeof data === 'object' && data !== null) {
+    if ('message' in data && typeof data.message === 'string') {
+      return data.message;
+    }
+    if ('detail' in data) {
+      return typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
+    }
+  }
+
+  return error.message || 'API request failed';
+}
+
 api.interceptors.response.use(
   (response: AxiosResponse) => response.data,
   (error) => {
-    const message = error.response?.data?.message || error.message || 'API request failed';
-    return Promise.reject(new Error(message));
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      clearSession();
+    }
+    return Promise.reject(new Error(formatErrorMessage(error)));
   }
 );
 
-
-// User API
 export const userAPI = {
-  /**
-   * Login using payload instead of query parameters
-   */
-  async login(email: string, password: string): Promise<User> {
-    // Moved email/password to payload as requested
-    // Using /login as a more standard endpoint for payload-based auth
-    const user = await api.post<User>('/login', { email, password });
-    
-    // Safety: ensure password is not in the object if returned by server
-    if (user) {
-      const { password: _, ...userWithoutPassword } = user as any;
-      return userWithoutPassword as User;
-    }
-    return user;
+  login(email: string, password: string): Promise<AuthResponse> {
+    return api.post<AuthResponse>('/login', { email, password });
   },
 
-  async signup(email: string, password: string, displayName: string): Promise<User> {
-    const newUser = {
+  signup(email: string, password: string, displayName: string): Promise<AuthResponse> {
+    return api.post<AuthResponse>('/signup', {
       email,
       password,
       displayName,
-      avatarUrl: `https://picsum.photos/id/${Math.floor(Math.random() * 70)}/200/200`
-    };
-    
-    // Moved to POST with payload
-    const user = await api.post<User>('/signup', newUser);
-    
-    if (user) {
-      const { password: _, ...userWithoutPassword } = user as any;
-      return userWithoutPassword as User;
-    }
-    return user;
-  }
+      avatarUrl: `https://picsum.photos/id/${Math.floor(Math.random() * 70)}/200/200`,
+    });
+  },
 };
 
-
-// Song API
 export const songAPI = {
   getAllSongs: () => api.get<Song[]>('/songs'),
   getSongById: (id: string) => api.get<Song>(`/songs/${id}`),
 };
 
-// Featured Playlists API
 export const playlistsAPI = {
   getFeaturedPlaylists: () => api.get<Playlist[]>('/featuredPlaylists'),
 };
 
-// Playlist API
 export const playlistAPI = {
   getPlaylists: (userId: string) => api.get<UserPlaylist[]>('/playlists', { params: { userId } }),
   
@@ -135,7 +133,6 @@ export const playlistAPI = {
   }
 };
 
-// Recently Played API
 export const recentlyPlayedAPI = {
   addToRecentlyPlayed: (userId: string, songId: string) => 
     api.post<RecentlyPlayed>('/recentlyPlayed', {
@@ -153,4 +150,3 @@ export const recentlyPlayedAPI = {
       }
     }),
 };
-

@@ -11,3 +11,14 @@ export interface SignupData extends AuthCredentials {
   displayName: string;
 }
 
+/** Response from POST /login and POST /signup */
+export interface AuthResponse extends User {
+  access: string;
+  refresh: string;
+}
+
+export interface AuthSession {
+  user: AuthUser;
+  access: string;
+  refresh: string;
+}
